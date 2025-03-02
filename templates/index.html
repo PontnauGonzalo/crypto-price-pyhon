@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizador de Precios de Criptomonedas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .price {
+            font-weight: bold;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Top 10 Criptomonedas</h1>
+    
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% else %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Rango</th>
+                    <th>Nombre</th>
+                    <th>Símbolo</th>
+                    <th>Precio (USD)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for crypto in criptomonedas %}
+                <tr>
+                    <td>{{ crypto.cmc_rank }}</td>
+                    <td>{{ crypto.name }}</td>
+                    <td>{{ crypto.symbol }}</td>
+                    <td class="price">${{ "%.2f"|format(crypto.quote.USD.price) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</body>
+</html>
