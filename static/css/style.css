@@ -1,0 +1,247 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2ecc71;
+    --dark-color: #2c3e50;
+    --light-color: #ecf0f1;
+    --danger-color: #e74c3c;
+    --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    /* Colores del tema claro (por defecto) */
+    --bg-color: #f9f9f9;
+    --card-bg: white;
+    --text-color: #2c3e50;
+    --border-color: #eee;
+    --header-gradient: linear-gradient(135deg, #3498db, #2ecc71);
+    --price-color: #3498db;
+}
+
+[data-theme="dark"] {
+    /* Colores del tema oscuro */
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --text-color: #ecf0f1;
+    --border-color: #333;
+    --header-gradient: linear-gradient(135deg, #2980b9, #27ae60);
+    --price-color: #4fc3f7;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: var(--header-gradient);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    color: white;
+    position: relative;
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+}
+
+.theme-toggle {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+}
+
+.theme-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.crypto-container {
+    background-color: var(--card-bg);
+    border-radius: 10px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.crypto-header {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+    padding: 15px 20px;
+    background-color: var(--dark-color);
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+.crypto-header div:first-child {
+    text-align: center;
+}
+
+.crypto-header div:nth-child(2) {
+    text-align: left;
+}
+
+crypto-header div:last-child {
+    text-align: right;
+}
+
+.crypto-row {
+    display: grid;
+    grid-template-columns: 0.5fr 2fr 1fr 1.5fr;
+    padding: 20px;
+    border-bottom: 1px solid var(--border-color);
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.crypto-row:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .crypto-row:hover {
+    background-color: #333; /* Un fondo oscuro, puedes ajustarlo a tu gusto */
+    color: var(--text-color); /* Se mantiene el color de texto definido para el modo oscuro */
+}
+
+.crypto-rank {
+    font-weight: bold;
+    color: var(--dark-color) !important; /* Forzar color independiente del tema */
+    text-align: center;
+    background-color: var(--light-color);
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.crypto-name {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+}
+
+.crypto-symbol {
+    color: #7f8c8d;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    display: inline-block;
+    text-align: center;
+}
+
+[data-theme="dark"] .crypto-symbol {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #a5a5a5;
+}
+
+.crypto-price {
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: var(--price-color);
+    text-align: right;
+}
+
+.error {
+    color: var(--danger-color);
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(231, 76, 60, 0.1);
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: var(--card-shadow);
+}
+
+.refresh-info {
+    text-align: right;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-top: 15px;
+    font-style: italic;
+}
+
+[data-theme="dark"] .refresh-info {
+    color: #a5a5a5;
+}
+
+.coin-icon {
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    color: var(--text-color);
+}
+
+[data-theme="dark"] .coin-icon {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+footer {
+    text-align: center;
+    margin-top: 30px;
+    padding: 15px;
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+[data-theme="dark"] footer {
+    color: #a5a5a5;
+}
+
+@media (max-width: 768px) {
+    .crypto-header {
+        grid-template-columns: 0.5fr 2fr 1.5fr;
+    }
+    
+    .crypto-row {
+        grid-template-columns: 0.5fr 2fr 1.5fr;
+    }
+    
+    .crypto-symbol {
+        display: none;
+    }
+}

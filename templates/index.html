@@ -1,68 +1,98 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visualizador de Precios de Criptomonedas</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .price {
-            font-weight: bold;
-        }
-        .error {
-            color: red;
-            text-align: center;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <h1>Top 10 Criptomonedas</h1>
-    
-    {% if error %}
-        <p class="error">{{ error }}</p>
-    {% else %}
-        <table>
-            <thead>
-                <tr>
-                    <th>Rango</th>
-                    <th>Nombre</th>
-                    <th>Símbolo</th>
-                    <th>Precio (USD)</th>
-                </tr>
-            </thead>
-            <tbody>
+    <div class="container">
+        <header>
+            <button class="theme-toggle" aria-label="Cambiar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+            <h1><i class="fas fa-coins"></i> Visualizador de Criptomonedas</h1>
+            <p>Precios actualizados de las 10 principales criptomonedas</p>
+        </header>
+        
+        {% if error %}
+            <div class="error">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% else %}
+            <div class="crypto-container">
+                <div class="crypto-header">
+                    <div>#</div>
+                    <div>Nombre</div>
+                    <div>Símbolo</div>
+                    <div>Precio (USD)</div>
+                </div>
+                
                 {% for crypto in criptomonedas %}
-                <tr>
-                    <td>{{ crypto.cmc_rank }}</td>
-                    <td>{{ crypto.name }}</td>
-                    <td>{{ crypto.symbol }}</td>
-                    <td class="price">${{ "%.2f"|format(crypto.quote.USD.price) }}</td>
-                </tr>
+                <div class="crypto-row">
+                    <div class="crypto-rank">{{ crypto.cmc_rank }}</div>
+                    <div class="crypto-name">
+                        <div class="coin-icon">
+                            {% if crypto.symbol == "BTC" %}
+                                <i class="fab fa-bitcoin"></i>
+                            {% elif crypto.symbol == "ETH" %}
+                                <i class="fab fa-ethereum"></i>
+                            {% else %}
+                                <i class="fas fa-coins"></i>
+                            {% endif %}
+                        </div>
+                        {{ crypto.name }}
+                    </div>
+                    <div class="crypto-symbol">{{ crypto.symbol }}</div>
+                    <div class="crypto-price">${{ "%.2f"|format(crypto.quote.USD.price) }}</div>
+                </div>
                 {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}
+            </div>
+            
+            <p class="refresh-info">Última actualización: {{ momento_actual }}</p>
+        {% endif %}
+        
+        <footer>
+            <p>Desarrollado usando la API de CoinMarketCap</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const themeIcon = themeToggle.querySelector('i');
+            const htmlElement = document.documentElement;
+            
+            // Comprobar si hay un tema guardado en localStorage
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                htmlElement.setAttribute('data-theme', savedTheme);
+                updateIcon(savedTheme);
+            }
+            
+            // Función para actualizar el icono según el tema
+            function updateIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                } else {
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                }
+            }
+            
+            // Alternar entre temas al hacer clic en el botón
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = htmlElement.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                htmlElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateIcon(newTheme);
+            });
+        });
+    </script>
 </body>
 </html>

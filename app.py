@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import requests
 import os
 from dotenv import load_dotenv
+from datetime import datetime
 
 # Cargar variables de entorno
 load_dotenv()
@@ -29,6 +30,9 @@ def inicio():
         'X-CMC_PRO_API_KEY': clave_api,
     }
     
+    # Obtener fecha y hora actual para mostrar en la página
+    momento_actual = datetime.now().strftime('%d/%m/%Y %H:%M:%S')
+    
     # Solicitud API
     respuesta = requests.get(url, headers=encabezados, params=parametros)
     
@@ -37,11 +41,11 @@ def inicio():
         datos = respuesta.json()
         # Extraer datos de criptomonedas
         criptomonedas = datos['data']
-        return render_template('index.html', criptomonedas=criptomonedas)
+        return render_template('index.html', criptomonedas=criptomonedas, momento_actual=momento_actual)
     else:
         # Manejo de errores
         mensaje_error = f"Error: {respuesta.status_code}"
-        return render_template('index.html', error=mensaje_error)
+        return render_template('index.html', error=mensaje_error, momento_actual=momento_actual)
 
 if __name__ == '__main__':
     app.run(debug=True)
