@@ -3,25 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visualizador de Precios de Criptomonedas</title>
+    <title>Top Noticias de Criptomonedas</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-    <!-- Contenido de la página -->
     <div class="container">
         <header>
             <button class="theme-toggle" aria-label="Cambiar tema">
                 <i class="fas fa-moon"></i>
             </button>
-            
-            <h1><i class="fas fa-coins"></i> Visualizador de Criptomonedas</h1>
-            <p>Precios actualizados de las 10 principales criptomonedas</p>
-            
-            <nav class="main-nav">
-                <a href="/" class="nav-link active"><i class="fas fa-chart-line"></i> Precios</a>
-                <a href="/noticias" class="nav-link"><i class="fas fa-newspaper"></i> Top Noticias</a>
-            </nav>
+            <h1><i class="fas fa-newspaper"></i> Noticias de Criptomonedas</h1>
+            <p>Últimas noticias del mundo cripto</p>
         </header>
         
         {% if error %}
@@ -30,32 +23,17 @@
             </div>
         {% else %}
             <div class="crypto-container">
-                <div class="crypto-header">
-                    <div>#</div>
-                    <div>Nombre</div>
-                    <div>Símbolo</div>
-                    <div>Precio (USD)</div>
-                </div>
-                
-                {% for crypto in criptomonedas %}
-                <div class="crypto-row">
-                    <div class="crypto-rank">{{ crypto.cmc_rank }}</div>
-                    <div class="crypto-name">
-                        <div class="coin-icon">
-                            {% if crypto.symbol == "BTC" %}
-                                <i class="fab fa-bitcoin"></i>
-                            {% elif crypto.symbol == "ETH" %}
-                                <i class="fab fa-ethereum"></i>
-                            {% else %}
-                                <i class="fas fa-coins"></i>
-                            {% endif %}
-                        </div>
-                        {{ crypto.name }}
+                <!-- Aquí irían las noticias -->
+                <div class="news-container">
+                    {% for noticia in noticias %}
+                    <div class="news-item">
+                        <h3>{{ noticia.titulo }}</h3>
+                        <p class="news-date">{{ noticia.fecha }}</p>
+                        <p class="news-description">{{ noticia.descripcion }}</p>
+                        <a href="{{ noticia.url }}" target="_blank" class="news-link">Leer más</a>
                     </div>
-                    <div class="crypto-symbol">{{ crypto.symbol }}</div>
-                    <div class="crypto-price">${{ "%.2f"|format(crypto.quote.USD.price) }}</div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
             </div>
             
             <p class="refresh-info">Última actualización: {{ momento_actual }}</p>
@@ -63,10 +41,10 @@
         
         <footer>
             <p>Desarrollado usando la API de CoinMarketCap</p>
+            <a href="/" class="back-link">Volver a precios</a>
         </footer>
     </div>
 
-    <!-- Script para cambiar el tema -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const themeToggle = document.querySelector('.theme-toggle');
@@ -102,6 +80,5 @@
             });
         });
     </script>
-
 </body>
 </html>
