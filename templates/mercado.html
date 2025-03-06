@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estadísticas Globales del Mercado Crypto</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <button class="theme-toggle" aria-label="Cambiar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+        <h1><i class="fas fa-globe"></i> Mercado Global de Criptomonedas</h1>
+        <p>Estadísticas actuales del mercado de criptomonedas</p>
+        <nav class="main-nav">
+          <a href="/" class="nav-link"
+            ><i class="fas fa-chart-line"></i> Precios</a
+          >
+          <a href="/noticias" class="nav-link"
+            ><i class="fas fa-newspaper"></i> Top Noticias</a
+          >
+          <a href="/mercado" class="nav-link active"
+            ><i class="fas fa-globe"></i> Mercado Global</a
+          >
+        </nav>
+      </header>
+
+      {% if error %}
+      <div class="error">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+      </div>
+      {% else %}
+      <div class="metrics-container">
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-coins"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Capitalización Total del Mercado</h3>
+            <p class="metric-value">
+              ${{ "{:,.0f}".format(metricas.quote.USD.total_market_cap) }}
+            </p>
+            <p
+              class="metric-change {% if metricas.quote.USD.total_market_cap_yesterday_percentage_change > 0 %}positive{% else %}negative{% endif %}"
+            >
+              <i
+                class="fas {% if metricas.quote.USD.total_market_cap_yesterday_percentage_change > 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"
+              ></i>
+              {{
+              "{:.2f}".format(metricas.quote.USD.total_market_cap_yesterday_percentage_change)
+              }}% (24h)
+            </p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Volumen Total (24h)</h3>
+            <p class="metric-value">
+              ${{ "{:,.0f}".format(metricas.quote.USD.total_volume_24h) }}
+            </p>
+            <p
+              class="metric-change {% if metricas.quote.USD.total_volume_24h_yesterday_percentage_change > 0 %}positive{% else %}negative{% endif %}"
+            >
+              <i
+                class="fas {% if metricas.quote.USD.total_volume_24h_yesterday_percentage_change > 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"
+              ></i>
+              {{
+              "{:.2f}".format(metricas.quote.USD.total_volume_24h_yesterday_percentage_change)
+              }}% (24h)
+            </p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fab fa-bitcoin"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Dominio de Bitcoin</h3>
+            <p class="metric-value">
+              {{ "{:.2f}".format(metricas.btc_dominance) }}%
+            </p>
+            <p
+              class="metric-change {% if metricas.btc_dominance_24h_percentage_change > 0 %}positive{% else %}negative{% endif %}"
+            >
+              <i
+                class="fas {% if metricas.btc_dominance_24h_percentage_change > 0 %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"
+              ></i>
+              {{ "{:.2f}".format(metricas.btc_dominance_24h_percentage_change)
+              }}% (24h)
+            </p>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <div class="metric-icon">
+            <i class="fas fa-database"></i>
+          </div>
+          <div class="metric-content">
+            <h3>Estadísticas</h3>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <p class="stat-label">Criptomonedas Activas</p>
+                <p class="stat-value">
+                  {{ "{:,}".format(metricas.active_cryptocurrencies) }}
+                </p>
+              </div>
+              <div class="stat-item">
+                <p class="stat-label">Exchanges Activos</p>
+                <p class="stat-value">
+                  {{ "{:,}".format(metricas.active_exchanges) }}
+                </p>
+              </div>
+              <div class="stat-item">
+                <p class="stat-label">Pares de Mercado</p>
+                <p class="stat-value">
+                  {{ "{:,}".format(metricas.active_market_pairs) }}
+                </p>
+              </div>
+              <div class="stat-item">
+                <p class="stat-label">Dominio de ETH</p>
+                <p class="stat-value">
+                  {{ "{:.2f}".format(metricas.eth_dominance) }}%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p class="refresh-info">Última actualización: {{ momento_actual }}</p>
+      {% endif %}
+
+      <footer>
+        <p>Desarrollado usando la API de CoinMarketCap</p>
+        <p>Dev. GonzaloPontnau 😎</p>
+      </footer>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const themeToggle = document.querySelector(".theme-toggle");
+        const themeIcon = themeToggle.querySelector("i");
+        const htmlElement = document.documentElement;
+
+        // Comprobar si hay un tema guardado en localStorage
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          updateIcon(savedTheme);
+        }
+
+        // Función para actualizar el icono según el tema
+        function updateIcon(theme) {
+          if (theme === "dark") {
+            themeIcon.classList.remove("fa-moon");
+            themeIcon.classList.add("fa-sun");
+          } else {
+            themeIcon.classList.remove("fa-sun");
+            themeIcon.classList.add("fa-moon");
+          }
+        }
+
+        // Alternar entre temas al hacer clic en el botón
+        themeToggle.addEventListener("click", function () {
+          const currentTheme = htmlElement.getAttribute("data-theme");
+          const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+          htmlElement.setAttribute("data-theme", newTheme);
+          localStorage.setItem("theme", newTheme);
+          updateIcon(newTheme);
+        });
+      });
+    </script>
+  </body>
+</html>

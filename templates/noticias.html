@@ -1,84 +1,125 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Top Noticias de Criptomonedas</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Noticias de Criptomonedas</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <button class="theme-toggle" aria-label="Cambiar tema">
-                <i class="fas fa-moon"></i>
-            </button>
-            <h1><i class="fas fa-newspaper"></i> Noticias de Criptomonedas</h1>
-            <p>Últimas noticias del mundo cripto</p>
-        </header>
-        
-        {% if error %}
-            <div class="error">
-                <i class="fas fa-exclamation-circle"></i> {{ error }}
+      <header>
+        <button class="theme-toggle" aria-label="Cambiar tema">
+          <i class="fas fa-moon"></i>
+        </button>
+        <h1><i class="fas fa-newspaper"></i> Noticias de Criptomonedas</h1>
+        <p>Las últimas noticias del mundo crypto</p>
+        <nav class="main-nav">
+          <a href="/" class="nav-link"
+            ><i class="fas fa-chart-line"></i> Precios</a
+          >
+          <a href="/noticias" class="nav-link active"
+            ><i class="fas fa-newspaper"></i> Top Noticias</a
+          >
+          <a href="/mercado" class="nav-link"
+            ><i class="fas fa-globe"></i> Mercado Global</a
+          >
+        </nav>
+      </header>
+
+      {% if mensaje_advertencia %}
+      <div class="warning">
+        <i class="fas fa-exclamation-triangle"></i> {{ mensaje_advertencia }}
+      </div>
+      {% endif %} {% if error %}
+      <div class="error">
+        <i class="fas fa-exclamation-circle"></i> {{ error }}
+      </div>
+      {% else %}
+      <div class="news-container">
+        {% for noticia in noticias %}
+        <div class="news-card">
+          <div class="news-header">
+            {% if noticia.imagen %}
+            <div
+              class="news-image"
+              style="background-image: url('{{ noticia.imagen }}');"
+            ></div>
+            {% else %}
+            <div class="news-image no-image">
+              <i class="fas fa-newspaper"></i>
             </div>
-        {% else %}
-            <div class="crypto-container">
-                <!-- Aquí irían las noticias -->
-                <div class="news-container">
-                    {% for noticia in noticias %}
-                    <div class="news-item">
-                        <h3>{{ noticia.titulo }}</h3>
-                        <p class="news-date">{{ noticia.fecha }}</p>
-                        <p class="news-description">{{ noticia.descripcion }}</p>
-                        <a href="{{ noticia.url }}" target="_blank" class="news-link">Leer más</a>
-                    </div>
-                    {% endfor %}
-                </div>
+            {% endif %}
+          </div>
+          <div class="news-content">
+            <h3 class="news-title">{{ noticia.titulo }}</h3>
+            <div class="news-meta">
+              <span
+                ><i class="far fa-calendar-alt"></i> {{ noticia.fecha }}</span
+              >
+              <span><i class="fas fa-newspaper"></i> {{ noticia.fuente }}</span>
             </div>
-            
-            <p class="refresh-info">Última actualización: {{ momento_actual }}</p>
-        {% endif %}
-        
-        <footer>
-            <p>Desarrollado usando la API de CoinMarketCap</p>
-            <a href="/" class="back-link">Volver a precios</a>
-        </footer>
+            <p class="news-description">{{ noticia.descripcion }}</p>
+            <div class="news-action">
+              <a href="{{ noticia.url }}" target="_blank" class="news-link">
+                Leer más <i class="fas fa-external-link-alt"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <p class="refresh-info">Última actualización: {{ momento_actual }}</p>
+      {% endif %}
+
+      <footer>
+        <p>Desarrollado usando la API de CoinMarketCap</p>
+        <p>Dev. GonzaloPontnau 😎</p>
+      </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeToggle = document.querySelector('.theme-toggle');
-            const themeIcon = themeToggle.querySelector('i');
-            const htmlElement = document.documentElement;
-            
-            // Comprobar si hay un tema guardado en localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                htmlElement.setAttribute('data-theme', savedTheme);
-                updateIcon(savedTheme);
-            }
-            
-            // Función para actualizar el icono según el tema
-            function updateIcon(theme) {
-                if (theme === 'dark') {
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                } else {
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                }
-            }
-            
-            // Alternar entre temas al hacer clic en el botón
-            themeToggle.addEventListener('click', function() {
-                const currentTheme = htmlElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                
-                htmlElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                updateIcon(newTheme);
-            });
+      document.addEventListener("DOMContentLoaded", function () {
+        const themeToggle = document.querySelector(".theme-toggle");
+        const themeIcon = themeToggle.querySelector("i");
+        const htmlElement = document.documentElement;
+
+        // Comprobar si hay un tema guardado en localStorage
+        const savedTheme = localStorage.getItem("theme");
+        if (savedTheme) {
+          htmlElement.setAttribute("data-theme", savedTheme);
+          updateIcon(savedTheme);
+        }
+
+        // Función para actualizar el icono según el tema
+        function updateIcon(theme) {
+          if (theme === "dark") {
+            themeIcon.classList.remove("fa-moon");
+            themeIcon.classList.add("fa-sun");
+          } else {
+            themeIcon.classList.remove("fa-sun");
+            themeIcon.classList.add("fa-moon");
+          }
+        }
+
+        // Alternar entre temas al hacer clic en el botón
+        themeToggle.addEventListener("click", function () {
+          const currentTheme = htmlElement.getAttribute("data-theme");
+          const newTheme = currentTheme === "dark" ? "light" : "dark";
+
+          htmlElement.setAttribute("data-theme", newTheme);
+          localStorage.setItem("theme", newTheme);
+          updateIcon(newTheme);
         });
+      });
     </script>
-</body>
+  </body>
 </html>
