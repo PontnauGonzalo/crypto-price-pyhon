@@ -200,7 +200,7 @@ header p {
   text-align: left;
 }
 
-crypto-header div:last-child {
+.crypto-header div:last-child {
   text-align: right;
 }
 
