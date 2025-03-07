@@ -51,6 +51,7 @@
             <div
               class="news-image"
               style="background-image: url('{{ noticia.imagen }}');"
+              loading="lazy"
             ></div>
             {% else %}
             <div class="news-image no-image">
@@ -119,6 +120,39 @@
           htmlElement.setAttribute("data-theme", newTheme);
           localStorage.setItem("theme", newTheme);
           updateIcon(newTheme);
+        });
+      });
+
+      // Implementación de lazy loading para imágenes
+      document.addEventListener("DOMContentLoaded", function () {
+        // Detectar cuando elementos entran en el viewport
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                const newsCard = entry.target;
+                const image = newsCard.querySelector(".news-image");
+
+                // Si es una imagen con background, cargarla solo cuando sea visible
+                if (image && image.style.backgroundImage.includes("url")) {
+                  // La imagen ya está configurada con CSS, solo aplicamos la transición
+                  image.classList.add("loaded");
+                  // Dejar de observar este elemento
+                  observer.unobserve(newsCard);
+                }
+              }
+            });
+          },
+          {
+            root: null,
+            rootMargin: "0px",
+            threshold: 0.1,
+          }
+        );
+
+        // Observar todas las tarjetas de noticias
+        document.querySelectorAll(".news-card").forEach((card) => {
+          observer.observe(card);
         });
       });
     </script>
