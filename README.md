@@ -3,8 +3,11 @@
 [![Flask](https://img.shields.io/badge/docs-Flask-green?logo=flask)](https://flask.palletsprojects.com/)
 [![CoinMarketCap API](https://img.shields.io/badge/docs-CMC_API-white?logo=coinmarketcap)](https://coinmarketcap.com/api/documentation/v1/)
 
-## Objetivo Final
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/2a0a3551-c67c-49bb-b032-2249161c3999" width="800" alt="Video demo de la aplicación">
+</p>
 
+## Objetivo Final
 Este proyecto es una **aplicación web simple** que muestra, en tiempo real, los precios de las 10 principales criptomonedas (por ejemplo, Bitcoin, Ethereum, etc.) en dólares estadounidenses (USD). Su propósito es ofrecer una herramienta accesible para que cualquier persona interesada en el mundo de las criptomonedas pueda visualizar datos actualizados, a la vez que sirve como ejemplo práctico para aprender a integrar APIs en proyectos web utilizando Python.
 
 La interfaz es minimalista y directa, presentando una lista de criptomonedas junto con sus precios actuales, nombres y símbolos. Está diseñada tanto para usuarios sin experiencia técnica como para desarrolladores que deseen explorar el código.
