@@ -15,11 +15,11 @@ Antes de ejecutar el proyecto, asegúrate de contar con lo siguiente:
 
 - **Python 3.x**
     
-    Descárgalo desde [python.org](https://www.python.org/downloads/) si no lo tienes instalado.
+    Descárgalo desde [python.org](https://www.python.org/downloads/) si no lo tenes instalado.
     
 - **Clave API de CoinMarketCap**
     
-    Regístrate en [CoinMarketCap API](https://coinmarketcap.com/api/) para obtener una clave API gratuita, necesaria para acceder a los datos de las criptomonedas.
+    Registrate en [CoinMarketCap API](https://coinmarketcap.com/api/) para obtener una clave API gratuita, necesaria para acceder a los datos de las criptomonedas.
     
 
 ## Configuración del Proyecto

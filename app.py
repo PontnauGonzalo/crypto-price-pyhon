@@ -14,9 +14,16 @@ app = Flask(__name__)
 
 @app.route("/")
 def inicio():
-    """Ruta para mostrar información de criptomonedas"""
+    """
+    Ruta principal que muestra información de criptomonedas.
+    
+    Obtiene datos de las 10 principales criptomonedas desde CoinMarketCap
+    y los renderiza en la plantilla index.html.
+    
+    Returns:
+        flask.Response: Plantilla renderizada con datos o mensaje de error
+    """
 
-    # Clave API desde .env
     clave_api = os.getenv("CMC_API_KEY")
 
     # API de CoinMarketCap
@@ -25,13 +32,13 @@ def inicio():
     # Parámetros para la solicitud API
     parametros = {"start": "1", "limit": "10", "convert": "USD"}
 
-    # Encabezados incluyendo tu clave API
+    # Encabezados incluyendo clave API
     encabezados = {
         "Accepts": "application/json",
         "X-CMC_PRO_API_KEY": clave_api,
     }
 
-    # Obtener fecha y hora actual para mostrar en la página
+    # Fecha y hora actual
     momento_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     # Solicitud API
@@ -59,7 +66,6 @@ def noticias():
 
     momento_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
-    # Mensaje explicativo para el usuario
     mensaje_advertencia = "La API de CoinMarketCap no proporciona acceso a noticias en su plan básico. Mostrando noticias de ejemplo."
 
     # Creamos noticias de ejemplo en lugar de hacer la llamada a la API
@@ -126,19 +132,17 @@ def noticias():
 def mercado():
     """Ruta para mostrar estadísticas globales del mercado de criptomonedas"""
 
-    # Clave API desde .env
     clave_api = os.getenv("CMC_API_KEY")
 
     # API de CoinMarketCap para métricas globales
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"
 
-    # Encabezados incluyendo tu clave API
+    # Encabezados incluyendo la clave API
     encabezados = {
         "Accepts": "application/json",
         "X-CMC_PRO_API_KEY": clave_api,
     }
 
-    # Obtener fecha y hora actual para mostrar en la página
     momento_actual = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
     try:
@@ -167,5 +171,6 @@ def mercado():
         )
 
 
+# Ejecutar la aplicación
 if __name__ == "__main__":
     app.run(debug=True)
