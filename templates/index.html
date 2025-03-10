@@ -1,129 +1,113 @@
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Visualizador de Precios de Criptomonedas</title>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ url_for('static', filename='css/style.css') }}"
-    />
-  </head>
-  <body>
-    <!-- Contenido de la página -->
-    <div class="container">
-      <header>
-        <button class="theme-toggle" aria-label="Cambiar tema">
-          <i class="fas fa-moon"></i>
-        </button>
 
-        <h1><i class="fas fa-coins"></i> Visualizador de Criptomonedas</h1>
-        <p>Precios actualizados de las 10 principales criptomonedas</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visualizador de Precios de Criptomonedas</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
 
-        <nav class="main-nav">
-          <a href="/" class="nav-link active"
-            ><i class="fas fa-chart-line"></i> Precios</a
-          >
-          <a href="/noticias" class="nav-link"
-            ><i class="fas fa-newspaper"></i> Top Noticias</a
-          >
-          <a href="/mercado" class="nav-link"
-            ><i class="fas fa-globe"></i> Mercado Global</a
-          >
-        </nav>
-      </header>
+<body>
+  <!-- Contenido de la página -->
+  <div class="container">
+    <header>
+      <button class="theme-toggle" aria-label="Cambiar tema">
+        <i class="fas fa-moon"></i>
+      </button>
 
-      {% if error %}
-      <div class="error">
-        <i class="fas fa-exclamation-circle"></i> {{ error }}
-      </div>
-      {% else %}
-      <div class="crypto-container">
-        <div class="crypto-header">
-          <div>#</div>
-          <div>Nombre</div>
-          <div>Símbolo</div>
-          <div>Precio (USD)</div>
-        </div>
+      <h1><i class="fas fa-coins"></i> Visualizador de Criptomonedas</h1>
+      <p>Precios actualizados de las 10 principales criptomonedas</p>
 
-        {% for crypto in criptomonedas %}
-        <div class="crypto-row">
-          <div class="crypto-rank">{{ crypto.cmc_rank }}</div>
-          <div class="crypto-name">
-            <div class="coin-icon">
-              <img
-                src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ crypto.id }}.png"
-                alt="{{ crypto.name }}"
-                class="crypto-logo"
-                onerror="this.onerror=null; this.src='{{ url_for(\'static\', filename=\'img/generic-coin.png\') }}';"
-              />
-            </div>
-            <a
-              href="https://www.tradingview.com/symbols/{{ crypto.symbol }}USD/"
-              target="_blank"
-              class="crypto-link"
-            >
-              {{ crypto.name }}
-              <i class="fas fa-external-link-alt"></i>
-            </a>
-          </div>
-          <div class="crypto-symbol">{{ crypto.symbol }}</div>
-          <div class="crypto-price">
-            ${{ "%.2f"|format(crypto.quote.USD.price) }}
-          </div>
-        </div>
-        {% endfor %}
+      <nav class="main-nav">
+        <a href="/" class="nav-link active"><i class="fas fa-chart-line"></i> Precios</a>
+        <a href="/noticias" class="nav-link"><i class="fas fa-newspaper"></i> Top Noticias</a>
+        <a href="/mercado" class="nav-link"><i class="fas fa-globe"></i> Mercado Global</a>
+      </nav>
+    </header>
+
+    {% if error %}
+    <div class="error">
+      <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </div>
+    {% else %}
+    <div class="crypto-container">
+      <div class="crypto-header">
+        <div>#</div>
+        <div>Nombre</div>
+        <div>Símbolo</div>
+        <div>Precio (USD)</div>
       </div>
 
-      <p class="refresh-info">Última actualización: {{ fecha_actual }}</p>
-      {% endif %}
-      </p>
-
-      <footer>
-        <p>Desarrollado usando la API de CoinMarketCap</p>
-        <p>Dev. GonzaloPontnau 😎</p>
-      </footer>
+      {% for crypto in criptomonedas %}
+      <div class="crypto-row">
+        <div class="crypto-rank">{{ crypto.cmc_rank }}</div>
+        <div class="crypto-name">
+          <div class="coin-icon">
+            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ crypto.id }}.png" alt="{{ crypto.name }}"
+              class="crypto-logo"
+              onerror="this.onerror=null; this.src='{{ url_for(\'static\', filename=\'img/generic-coin.png\') }}';" />
+          </div>
+          <a href="https://www.tradingview.com/symbols/{{ crypto.symbol }}USD/" target="_blank" class="crypto-link">
+            {{ crypto.name }}
+            <i class="fas fa-external-link-alt"></i>
+          </a>
+        </div>
+        <div class="crypto-symbol">{{ crypto.symbol }}</div>
+        <div class="crypto-price">
+          ${{ "%.2f"|format(crypto.quote.USD.price) }}
+        </div>
+      </div>
+      {% endfor %}
     </div>
 
-    <!-- Script para cambiar el tema -->
-    <script>
-      document.addEventListener("DOMContentLoaded", function () {
-        const themeToggle = document.querySelector(".theme-toggle");
-        const themeIcon = themeToggle.querySelector("i");
-        const htmlElement = document.documentElement;
+    <p class="refresh-info">Última actualización: {{ fecha_actual }}</p>
+    {% endif %}
+    </p>
 
-        // Comprobar si hay un tema guardado en localStorage
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) {
-          htmlElement.setAttribute("data-theme", savedTheme);
-          updateIcon(savedTheme);
+    <footer>
+      <p>Desarrollado usando la API de CoinMarketCap</p>
+      <p>Dev. GonzaloPontnau 😎</p>
+    </footer>
+  </div>
+
+  <!-- Script para cambiar el tema -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const themeToggle = document.querySelector(".theme-toggle");
+      const themeIcon = themeToggle.querySelector("i");
+      const htmlElement = document.documentElement;
+
+      // Comprobar si hay un tema guardado en localStorage
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme) {
+        htmlElement.setAttribute("data-theme", savedTheme);
+        updateIcon(savedTheme);
+      }
+
+      // Función para actualizar el icono según el tema
+      function updateIcon(theme) {
+        if (theme === "dark") {
+          themeIcon.classList.remove("fa-moon");
+          themeIcon.classList.add("fa-sun");
+        } else {
+          themeIcon.classList.remove("fa-sun");
+          themeIcon.classList.add("fa-moon");
         }
+      }
 
-        // Función para actualizar el icono según el tema
-        function updateIcon(theme) {
-          if (theme === "dark") {
-            themeIcon.classList.remove("fa-moon");
-            themeIcon.classList.add("fa-sun");
-          } else {
-            themeIcon.classList.remove("fa-sun");
-            themeIcon.classList.add("fa-moon");
-          }
-        }
+      // Alternar entre temas al hacer clic en el botón
+      themeToggle.addEventListener("click", function () {
+        const currentTheme = htmlElement.getAttribute("data-theme");
+        const newTheme = currentTheme === "dark" ? "light" : "dark";
 
-        // Alternar entre temas al hacer clic en el botón
-        themeToggle.addEventListener("click", function () {
-          const currentTheme = htmlElement.getAttribute("data-theme");
-          const newTheme = currentTheme === "dark" ? "light" : "dark";
-
-          htmlElement.setAttribute("data-theme", newTheme);
-          localStorage.setItem("theme", newTheme);
-          updateIcon(newTheme);
-        });
+        htmlElement.setAttribute("data-theme", newTheme);
+        localStorage.setItem("theme", newTheme);
+        updateIcon(newTheme);
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>
