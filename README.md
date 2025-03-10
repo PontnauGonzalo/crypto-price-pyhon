@@ -2,10 +2,14 @@
 [![Python](https://img.shields.io/badge/docs-Python-blue?logo=python)](https://docs.python.org/3/)
 [![Flask](https://img.shields.io/badge/docs-Flask-green?logo=flask)](https://flask.palletsprojects.com/)
 [![CoinMarketCap API](https://img.shields.io/badge/docs-CMC_API-white?logo=coinmarketcap)](https://coinmarketcap.com/api/documentation/v1/)
+[![Demo en vivo](https://img.shields.io/badge/web-online-grey?logo=vercel)](https://crypto-price-visualizer-one.vercel.app/)
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2a0a3551-c67c-49bb-b032-2249161c3999" width="800" alt="Video demo de la aplicación">
 </p>
+
+> [!TIP] 
+> **La aplicación está disponible en línea** Puedes ver una demostración en vivo aquí: [**crypto-price-visualizer-one.vercel.app**](https://crypto-price-visualizer-one.vercel.app/)
 
 ## Objetivo Final
 Este proyecto es una **aplicación web simple** que muestra, en tiempo real, los precios de las 10 principales criptomonedas (por ejemplo, Bitcoin, Ethereum, etc.) en dólares estadounidenses (USD). Su propósito es ofrecer una herramienta accesible para que cualquier persona interesada en el mundo de las criptomonedas pueda visualizar datos actualizados, a la vez que sirve como ejemplo práctico para aprender a integrar APIs en proyectos web utilizando Python.
@@ -100,105 +104,6 @@ CMC-price/
 └── README.md
 ``` 
 
-## Despliegue en Servicios de Hosting Gratuitos
-
-Esta aplicación está preparada para ser desplegada en varios servicios de hosting gratuitos. A continuación, se detallan los pasos para algunos de los más populares:
-
-### Render
-
-1. **Crear una cuenta en Render**
-   - Regístrate en [render.com](https://render.com/)
-
-2. **Crear un nuevo servicio web**
-   - Haz clic en "New" y selecciona "Web Service"
-   - Conecta tu repositorio de GitHub o sube el código directamente
-
-3. **Configurar el servicio**
-   - **Nombre**: Elige un nombre para tu aplicación
-   - **Runtime**: Python 3
-   - **Build Command**: `pip install -r requirements.txt`
-   - **Start Command**: `gunicorn app:app`
-
-4. **Configurar variables de entorno**
-   - En la sección "Environment", añade la variable `CMC_API_KEY` con tu clave de API de CoinMarketCap
-
-5. **Desplegar**
-   - Haz clic en "Create Web Service"
-   - Render desplegará automáticamente tu aplicación
-
-### PythonAnywhere
-
-1. **Crear una cuenta en PythonAnywhere**
-   - Regístrate en [pythonanywhere.com](https://www.pythonanywhere.com/)
-
-2. **Subir el código**
-   - Ve a la sección "Files" y sube todos los archivos del proyecto
-   - O clona el repositorio usando la consola de PythonAnywhere
-
-3. **Configurar un entorno virtual**
-   ```bash
-   mkvirtualenv --python=/usr/bin/python3.8 myenv
-   pip install -r requirements.txt
-   ```
-
-4. **Configurar la variable de entorno**
-   - Crea un archivo `.env` con tu clave API
-
-5. **Configurar la aplicación web**
-   - Ve a la pestaña "Web"
-   - Haz clic en "Add a new web app"
-   - Selecciona "Manual configuration" y Python 3.8
-   - Configura el campo "Source code" a la ruta de tu proyecto
-   - Configura el campo "Working directory" a la misma ruta
-   - En la sección "WSGI configuration file", edita el archivo para que contenga:
-     ```python
-     import sys
-     path = '/home/tuusuario/ruta-a-tu-proyecto'
-     if path not in sys.path:
-         sys.path.append(path)
-     
-     from app import app as application
-     ```
-
-6. **Reiniciar la aplicación**
-   - Haz clic en el botón "Reload"
-
-### Vercel
-
-1. **Instalar Vercel CLI**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Crear archivo vercel.json**
-   Crea un archivo `vercel.json` en la raíz del proyecto:
-   ```json
-   {
-     "version": 2,
-     "builds": [
-       {
-         "src": "app.py",
-         "use": "@vercel/python"
-       }
-     ],
-     "routes": [
-       {
-         "src": "/(.*)",
-         "dest": "app.py"
-       }
-     ]
-   }
-   ```
-
-3. **Desplegar**
-   ```bash
-   vercel
-   ```
-
-4. **Configurar variables de entorno**
-   - En el dashboard de Vercel, ve a tu proyecto
-   - Ve a "Settings" > "Environment Variables"
-   - Añade la variable `CMC_API_KEY` con tu clave de API
 
 ## Solución de Problemas
 
@@ -222,5 +127,5 @@ Esta aplicación está preparada para ser desplegada en varios servicios de host
 >     
 
 <br></br>
-> [!NOTE]
+> [!WARNING]
 > El proyecto utiliza el plan gratuito de CoinMarketCap, que tiene limitaciones (333 solicitudes diarias y 10,000 mensuales)
