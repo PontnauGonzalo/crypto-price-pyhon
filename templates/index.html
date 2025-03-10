@@ -45,9 +45,10 @@
         <div class="crypto-rank">{{ crypto.cmc_rank }}</div>
         <div class="crypto-name">
           <div class="coin-icon">
-            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ crypto.id }}.png" alt="{{ crypto.name }}"
-              class="crypto-logo"
-              onerror="this.onerror=null; this.src='{{ url_for(\'static\', filename=\'img/generic-coin.png\') }}';" />
+            <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ crypto.id }}.png" 
+                 alt="{{ crypto.name }}"
+                 class="crypto-logo"
+                 onerror="if(this.src != '{{ url_for('static', filename='img/generic-coin.png') }}') this.src = '{{ url_for('static', filename='img/generic-coin.png') }}';" />
           </div>
           <a href="https://www.tradingview.com/symbols/{{ crypto.symbol }}USD/" target="_blank" class="crypto-link">
             {{ crypto.name }}
@@ -109,5 +110,4 @@
     });
   </script>
 </body>
-
 </html>
