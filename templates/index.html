@@ -59,7 +59,7 @@
                 src="https://s2.coinmarketcap.com/static/img/coins/64x64/{{ crypto.id }}.png"
                 alt="{{ crypto.name }}"
                 class="crypto-logo"
-                onerror="this.onerror=null; this.src='{{ url_for('static', filename='img/generic-coin.png') }}'"
+                onerror="this.onerror=null; this.src='{{ url_for(\'static\', filename=\'img/generic-coin.png\') }}';"
               />
             </div>
             <a

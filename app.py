@@ -33,6 +33,11 @@ def inicio():
     """
 
     clave_api = os.getenv("CMC_API_KEY")
+    
+    # Si no hay clave API en las variables de entorno, mostrar error
+    if not clave_api:
+        mensaje_error = "Error: No se ha configurado la clave API de CoinMarketCap"
+        return render_template("index.html", error=mensaje_error)
 
     # API de CoinMarketCap
     url = "https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest"
@@ -46,20 +51,26 @@ def inicio():
         "X-CMC_PRO_API_KEY": clave_api,
     }
 
-    # Solicitud API
-    respuesta = requests.get(url, headers=encabezados, params=parametros)
+    try:
+        # Solicitud API
+        respuesta = requests.get(url, headers=encabezados, params=parametros)
 
-    # 200=OK, 400=Bad Request, 401=Unauthorized, 500=Internal Server Error
-    if respuesta.status_code == 200:
-        datos = respuesta.json()
-        # Extraer datos de criptomonedas
-        criptomonedas = datos["data"]
-        return render_template(
-            "index.html", criptomonedas=criptomonedas
-        )
-    else:
-        # Manejo de errores
-        mensaje_error = f"Error: {respuesta.status_code}"
+        # 200=OK, 400=Bad Request, 401=Unauthorized, 500=Internal Server Error
+        if respuesta.status_code == 200:
+            datos = respuesta.json()
+            # Extraer datos de criptomonedas
+            criptomonedas = datos["data"]
+            return render_template(
+                "index.html", criptomonedas=criptomonedas
+            )
+        else:
+            # Manejo de errores
+            mensaje_error = f"Error: {respuesta.status_code}"
+            return render_template(
+                "index.html", error=mensaje_error
+            )
+    except Exception as e:
+        mensaje_error = f"Error al conectar con la API: {str(e)}"
         return render_template(
             "index.html", error=mensaje_error
         )
@@ -84,7 +95,7 @@ def noticias():
 # Caché para las noticias (válido por 1 hora)
 @lru_cache(maxsize=1)
 def get_noticias_ejemplo():
-    """Genera noticias de ejemplo y las guarda en caché por 1 hora"""
+    """Genera noticias de ejemplo y las guarda en caché por 1 día"""
     
     # Genera timestamp diario para invalidar la caché después de 1 día
     cache_day = time.strftime("%Y-%m-%d")
@@ -149,6 +160,11 @@ def mercado():
     """Ruta para mostrar estadísticas globales del mercado de criptomonedas"""
 
     clave_api = os.getenv("CMC_API_KEY")
+    
+    # Si no hay clave API en las variables de entorno, mostrar error
+    if not clave_api:
+        mensaje_error = "Error: No se ha configurado la clave API de CoinMarketCap"
+        return render_template("mercado.html", error=mensaje_error)
 
     # API de CoinMarketCap para métricas globales
     url = "https://pro-api.coinmarketcap.com/v1/global-metrics/quotes/latest"
@@ -187,4 +203,7 @@ def mercado():
 
 # Ejecutar la aplicación
 if __name__ == "__main__":
-    app.run(debug=True)
+    # Obtener el puerto del entorno o usar 5000 como predeterminado
+    port = int(os.environ.get("PORT", 5000))
+    # En producción, no usar debug=True
+    app.run(host="0.0.0.0", port=port, debug=False)

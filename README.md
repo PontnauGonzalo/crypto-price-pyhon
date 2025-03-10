@@ -95,8 +95,110 @@ CMC-price/
 │
 ├── app.py                 # Aplicación Flask principal
 ├── .env                   # Archivo de configuración (no incluido en el repositorio)
+├── requirements.txt       # Dependencias del proyecto
+├── Procfile               # Configuración para despliegue en Heroku
 └── README.md
 ``` 
+
+## Despliegue en Servicios de Hosting Gratuitos
+
+Esta aplicación está preparada para ser desplegada en varios servicios de hosting gratuitos. A continuación, se detallan los pasos para algunos de los más populares:
+
+### Render
+
+1. **Crear una cuenta en Render**
+   - Regístrate en [render.com](https://render.com/)
+
+2. **Crear un nuevo servicio web**
+   - Haz clic en "New" y selecciona "Web Service"
+   - Conecta tu repositorio de GitHub o sube el código directamente
+
+3. **Configurar el servicio**
+   - **Nombre**: Elige un nombre para tu aplicación
+   - **Runtime**: Python 3
+   - **Build Command**: `pip install -r requirements.txt`
+   - **Start Command**: `gunicorn app:app`
+
+4. **Configurar variables de entorno**
+   - En la sección "Environment", añade la variable `CMC_API_KEY` con tu clave de API de CoinMarketCap
+
+5. **Desplegar**
+   - Haz clic en "Create Web Service"
+   - Render desplegará automáticamente tu aplicación
+
+### PythonAnywhere
+
+1. **Crear una cuenta en PythonAnywhere**
+   - Regístrate en [pythonanywhere.com](https://www.pythonanywhere.com/)
+
+2. **Subir el código**
+   - Ve a la sección "Files" y sube todos los archivos del proyecto
+   - O clona el repositorio usando la consola de PythonAnywhere
+
+3. **Configurar un entorno virtual**
+   ```bash
+   mkvirtualenv --python=/usr/bin/python3.8 myenv
+   pip install -r requirements.txt
+   ```
+
+4. **Configurar la variable de entorno**
+   - Crea un archivo `.env` con tu clave API
+
+5. **Configurar la aplicación web**
+   - Ve a la pestaña "Web"
+   - Haz clic en "Add a new web app"
+   - Selecciona "Manual configuration" y Python 3.8
+   - Configura el campo "Source code" a la ruta de tu proyecto
+   - Configura el campo "Working directory" a la misma ruta
+   - En la sección "WSGI configuration file", edita el archivo para que contenga:
+     ```python
+     import sys
+     path = '/home/tuusuario/ruta-a-tu-proyecto'
+     if path not in sys.path:
+         sys.path.append(path)
+     
+     from app import app as application
+     ```
+
+6. **Reiniciar la aplicación**
+   - Haz clic en el botón "Reload"
+
+### Vercel
+
+1. **Instalar Vercel CLI**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Crear archivo vercel.json**
+   Crea un archivo `vercel.json` en la raíz del proyecto:
+   ```json
+   {
+     "version": 2,
+     "builds": [
+       {
+         "src": "app.py",
+         "use": "@vercel/python"
+       }
+     ],
+     "routes": [
+       {
+         "src": "/(.*)",
+         "dest": "app.py"
+       }
+     ]
+   }
+   ```
+
+3. **Desplegar**
+   ```bash
+   vercel
+   ```
+
+4. **Configurar variables de entorno**
+   - En el dashboard de Vercel, ve a tu proyecto
+   - Ve a "Settings" > "Environment Variables"
+   - Añade la variable `CMC_API_KEY` con tu clave de API
 
 ## Solución de Problemas
 
@@ -104,7 +206,7 @@ CMC-price/
 > 
 > - _Error "401 Unauthorized"_
 >     
->     Verifica que la clave API esté correctamente configurada en el archivo `.env` y que sea válida.
+>     Verifica que la clave API esté correctamente configurada en el archivo `.env` o en las variables de entorno del servicio de hosting y que sea válida.
 >     
 > - _Error "429 Too Many Requests"_
 >     
@@ -112,7 +214,11 @@ CMC-price/
 >     
 > - _La página no carga_
 >     
->     Asegúrate de que el servidor esté corriendo (`python app.py`) y que estés utilizando la URL correcta (`http://localhost:5000`).
+>     Asegúrate de que el servidor esté corriendo y que estés utilizando la URL correcta.
+>     
+> - _Error en el despliegue_
+>     
+>     Verifica los logs del servicio de hosting para identificar el problema específico.
 >     
 
 <br></br>
